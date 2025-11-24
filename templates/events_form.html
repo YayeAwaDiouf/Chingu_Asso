@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">{{ 'Nouvel événement' if not event else 'Modifier événement' }}</h1>
+
+<div class="card">
+
+    <form method="post" class="member-form">
+
+        <label>Titre :</label><br>
+        <input type="text" name="title" class="input-field"
+               value="{{ event.title if event else '' }}" required>
+
+        <label>Date :</label><br>
+        <input type="date" name="event_date" class="input-field"
+               value="{{ event.event_date if event else '' }}" required>
+
+        <label>Lieu :</label><br>
+        <input type="text" name="location" class="input-field"
+               value="{{ event.location if event else '' }}">
+
+        <label>Description :</label><br>
+        <textarea name="description" class="input-field" rows="4">{{ event.description if event else '' }}</textarea>
+
+        <div class="btn-center">
+            <button type="submit" class="btn-submit">💾 Enregistrer</button>
+        </div>
+
+        <a href="{{ url_for('events_list') }}" class="cancel-link">Annuler</a>
+
+    </form>
+
+</div>
+
+{% endblock %}

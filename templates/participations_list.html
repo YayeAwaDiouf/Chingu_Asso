@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">Participations</h1>
+
+<a href="{{ url_for('participations_new') }}" class="btn-submit" style="margin-bottom:20px; display:inline-block;">
+    ➕ Nouvelle participation
+</a>
+
+<div class="card">
+<table>
+    <thead>
+        <tr>
+            <th>Membre</th>
+            <th>Événement</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in participations %}
+        <tr>
+            <td>{{ p.member.first_name }} {{ p.member.last_name }}</td>
+            <td>{{ p.event.title }}</td>
+            
+            <td>
+                {% if p.status == "présent" %}
+                    <span class="badge badge-green">Présent</span>
+                {% elif p.status == "absent" %}
+                    <span class="badge badge-orange">Absent</span>
+                {% else %}
+                    <span class="badge badge-blue">Inscrit</span>
+                {% endif %}
+            </td>
+
+            <td>
+                
+                <form action="{{ url_for('participations_delete', pid=p.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-delete sweet-delete">🗑 Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

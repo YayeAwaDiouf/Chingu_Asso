@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">Gestion des événements</h1>
+<p class="section-subtitle">Liste des événements programmés dans l’association.</p>
+
+<!-- Bouton Ajouter -->
+<a href="{{ url_for('events_new') }}" class="btn-gold" style="margin-bottom: 25px; display: inline-block;">
+    ➕ Ajouter un événement
+</a>
+
+<div class="card">
+    <table>
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for e in events %}
+        <tr>
+            <td>{{ e.title }}</td>
+            <td>{{ e.event_date }}</td>
+            <td>{{ e.location or '-' }}</td>
+
+            <td>
+                <!-- Bouton Modifier -->
+                <a href="{{ url_for('events_edit', event_id=e.id) }}" class="action-edit">✏ Modifier</a>
+
+                <!-- Bouton Supprimer -->
+                <button class="action-delete"
+                        data-url="{{ url_for('events_delete', event_id=e.id) }}">
+                    🗑 Supprimer
+                </button>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center">Aucun événement pour le moment.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Script SweetAlert pour suppression -->
+<script>
+document.querySelectorAll(".action-delete").forEach(btn => {
+    btn.addEventListener("click", function () {
+        let url = this.getAttribute("data-url");
+        Swal.fire({
+            title: "Supprimer cet événement ?",
+            text: "Cette action est irréversible.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0a0f2e",
+            cancelButtonColor: "#B83227",
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = url;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

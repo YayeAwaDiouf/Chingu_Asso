@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">Ajouter / Modifier un membre</h1>
+
+<div class="card">
+
+    <form action="" method="post" class="form-member">
+
+        <label>Prénom :</label>
+        <input type="text" name="first_name"
+               value="{{ member.first_name if member else '' }}" required>
+
+        <label>Nom :</label>
+        <input type="text" name="last_name"
+               value="{{ member.last_name if member else '' }}" required>
+
+        <label>Email :</label>
+        <input type="email" name="email"
+               value="{{ member.email if member else '' }}" required>
+
+        <label>Statut :</label>
+        <select name="status" required>
+            <option value="Actif" {% if member and member.status == "Actif" %}selected{% endif %}>Actif</option>
+            <option value="En attente" {% if member and member.status == "En attente" %}selected{% endif %}>En attente</option>
+            <option value="Suspendu" {% if member and member.status == "Suspendu" %}selected{% endif %}>Suspendu</option>
+        </select>
+
+        <button type="submit" class="btn-save">
+            💾 Enregistrer
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

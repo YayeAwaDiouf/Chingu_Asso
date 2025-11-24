@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else 'ChinguAsso' }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+       <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo-img">
+            ChinguAsso
+        </div>
+
+        <button class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('members_list') }}">Membres</a></li>
+            <li><a href="{{ url_for('events_list') }}">Événements</a></li>
+            <li><a href="{{ url_for('dues_list') }}">Cotisations</a></li>
+            <li><a href="{{ url_for('participations_list') }}">Participations</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".menu-toggle").onclick = function() {
+                document.querySelector(".nav-links").classList.toggle("show");
+            };
+        });
+    </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+        {% for category, message in messages %}
+        Swal.fire({
+            icon: '{{ "success" if category == "success" else "error" }}',
+            title: '{{ message }}',
+            confirmButtonColor: "#0a0f2e",  // couleur navbar
+            timer: 2000,
+            showConfirmButton: false
+        });
+        {% endfor %}
+    </script>
+    {% endif %}
+    {% endwith %}
+    <script>
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                let form = this.closest(".delete-form");
+
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "Voulez-vous vraiment supprimer ce membre ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0a0f2e", // couleur navbar
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Oui, supprimer",
+                    cancelButtonText: "Annuler"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();  // Envoie après validation
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const forms = document.querySelectorAll("form button.btn-delete");
+
+        forms.forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "Supprimer ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0a0f2e",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Oui",
+                    cancelButtonText: "Annuler"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        btn.closest("form").submit();
+                    }
+                });
+            });
+        });
+    });
+    </script>
+    <script>
+document.querySelectorAll(".delete-participation").forEach(form => {
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Supprimer cette participation ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0a0f2e",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui, supprimer"
+        }).then((result) => {
+            if (result.isConfirmed) form.submit();
+        });
+    });
+});
+</script>
+
+</body>
+</html>

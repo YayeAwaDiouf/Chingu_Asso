@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">Gestion des membres</h1>
+<p class="section-subtitle">Liste des membres enregistrés dans l’association.</p>
+
+<!-- Bouton Ajouter -->
+<a href="{{ url_for('members_new') }}" class="btn-gold" style="margin-bottom: 25px; display: inline-block;">
+    ➕ Ajouter un membre
+</a>
+
+<!-- CARTE LISTE MEMBRES -->
+<div class="card">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Cotisation</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for m in members %}
+            <tr>
+                <td>{{ m.first_name }} {{ m.last_name }}</td>
+                <td>{{ m.email }}</td>
+              <td>
+                {% set latest_due = m.dues|last %}
+                {% if latest_due %}
+                    {% if latest_due.paid %}
+                        ✔ Payée ({{ latest_due.amount }} Fcfa)
+                    {% else %}
+                        ❌ Non payée
+                    {% endif %}
+                {% else %}
+                    - Aucune
+                {% endif %}
+            </td>
+
+
+
+                <!-- Badge Statut -->
+                <td>
+                    {% if m.status == "Actif" %}
+                        <span class="badge badge-green">Actif</span>
+                    {% elif m.status == "En attente" %}
+                        <span class="badge badge-orange">En attente</span>
+                    {% else %}
+                        <span class="badge badge-blue">Suspendu</span>
+                    {% endif %}
+                </td>
+
+                <!-- Actions -->
+                <td>
+                    <a href="{{ url_for('members_edit', member_id=m.id) }}" style="margin-right: 10px;">✏ Modifier</a>
+
+                    <form action="{{ url_for('member_delete', member_id=m.id) }}" method="post" class="delete-form" style="display:inline;">
+                        <button type="button" class="delete-btn" style="background:none;border:none;color:red;cursor:pointer;">
+                            🗑 Supprimer
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        document.querySelectorAll("table tr").forEach(row => {
+            row.querySelectorAll("td").forEach((td, index) => {
+                const header = row.closest("table").querySelectorAll("th")[index];
+                if (header) {
+                    td.setAttribute("data-label", header.innerText);
+                }
+            });
+        });
+    </script>
+
+
+</div>
+
+{% endblock %}

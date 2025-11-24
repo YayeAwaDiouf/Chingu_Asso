@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="section-title">Gestion des cotisations</h1>
+<p class="section-subtitle">Historique des paiements des membres.</p>
+
+<a href="{{ url_for('dues_new') }}" class="btn-gold" style="margin-bottom:25px; display:inline-block;">
+    ➕ Nouvelle cotisation
+</a>
+
+<div class="card">
+    <table>
+        <thead>
+        <tr>
+            <th>Membre</th>
+            <th>Année</th>
+            <th>Montant</th>
+            <th>Payée</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for d in dues %}
+        <tr>
+            <td>{{ d.member.last_name }} {{ d.member.first_name }}</td>
+            <td>{{ d.year }}</td>
+            <td>{{ '%.2f'|format(d.amount) }} Fcfa</td>
+            <td>
+                {% if d.paid %}
+                    ✔ Payée
+                {% else %}
+                    ❌ Non payée
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('dues_edit', due_id=d.id) }}" class="action-edit">✏ Modifier</a>
+
+                <button class="action-delete" data-url="{{ url_for('dues_delete', due_id=d.id) }}">
+                    🗑 Supprimer
+                </button>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center">Aucune cotisation pour le moment.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.querySelectorAll(".action-delete").forEach(btn => {
+    btn.addEventListener("click", function () {
+        let url = this.getAttribute("data-url");
+        Swal.fire({
+            title: "Supprimer cette cotisation ?",
+            text: "Cette action est irréversible.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0a0f2e",
+            cancelButtonColor: "#B83227",
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let form = document.createElement("form");
+                form.method = "POST";
+                form.action = url;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

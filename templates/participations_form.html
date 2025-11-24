@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">Ajouter une participation</h1>
+
+<div class="card">
+
+<form method="post" class="form-member">
+
+    <label>Membre :</label>
+    <select name="member_id" required class="input-field">
+        {% for m in members %}
+        <option value="{{ m.id }}">{{ m.first_name }} {{ m.last_name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Événement :</label>
+    <select name="event_id" required class="input-field">
+        {% for e in events %}
+        <option value="{{ e.id }}">{{ e.title }} ({{ e.event_date }})</option>
+        {% endfor %}
+    </select>
+
+    <label>Statut :</label>
+    <select name="status" class="input-field">
+        <option value="inscrit">Inscrit</option>
+        <option value="présent">Présent</option>
+        <option value="absent">Absent</option>
+    </select>
+
+    <button type="submit" class="btn-submit">💾 Enregistrer</button>
+
+</form>
+
+</div>
+
+{% endblock %}

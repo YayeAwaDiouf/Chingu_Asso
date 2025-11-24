@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="section-title">{{ 'Nouvelle cotisation' if not due else 'Modifier cotisation' }}</h1>
+
+<div class="card">
+
+    <form method="post" class="member-form">
+
+        <label>Membre :</label><br>
+        <select name="member_id" required class="input-field">
+            {% for m in members %}
+                <option value="{{ m.id }}" {% if due and m.id == due.member_id %}selected{% endif %}>
+                    {{ m.last_name }} {{ m.first_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Année :</label><br>
+        <input type="number" name="year" class="input-field"
+               value="{{ due.year if due else 2025 }}" required>
+
+        <label>Montant (Fcfa) :</label><br>
+        <input type="number" step="0.01" name="amount" class="input-field"
+               value="{{ due.amount if due else 0 }}" required>
+
+        <label class="check-label">
+            <input type="checkbox" name="paid" {% if due and due.paid %}checked{% endif %}> 💰 Payé
+        </label>
+
+        <div class="btn-center">
+            <button type="submit" class="btn-submit">💾 Enregistrer</button>
+        </div>
+
+        <a href="{{ url_for('dues_list') }}" class="cancel-link">Annuler</a>
+
+    </form>
+
+</div>
+
+{% endblock %}
