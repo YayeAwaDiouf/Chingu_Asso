@@ -21,7 +21,41 @@ source .venv/bin/activate
 
 # 2) Installer les dépendances
 pip install -r requirements.txt
+----------------------------------------------------------------------------------------------------Comment accéder à l’application
 
+Se placer dans le disque D :
+Dans le terminal, taper :
+
+D:
+
+
+Aller dans le dossier du projet :
+Utiliser la commande cd pour accéder au fichier source, par exemple :
+
+cd D:\Documents\L3\cours\Introduction aux systemes d'information\gestion_associative_app
+
+
+Activer l’environnement virtuel :
+Dans le dossier du projet, taper :
+
+.\.venv\Scripts\activate
+
+
+Tester si Flask fonctionne :
+Lancer l’application avec l’une des commandes suivantes :
+
+flask run
+
+
+ou
+
+python app.py
+
+
+Accéder à l’application dans le navigateur :
+Ouvrir l’adresse suivante dans un navigateur :
+
+http://127.0.0.1:5000
 # 3) Démarrer l'appli
 export FLASK_APP=app.py   # Windows PowerShell: $Env:FLASK_APP="app.py"
 flask run
